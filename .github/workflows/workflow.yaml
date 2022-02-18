@@ -19,11 +19,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Cache npm modules
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install Packages
+        shell: bash
+        run:  npm ci
+
       - name: Configure AWS credentials from IAM Role
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ env.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: CDK Diff Check
+        run: npm run cdk diff -- --all
 
       - name: who am i
         shell: bash
