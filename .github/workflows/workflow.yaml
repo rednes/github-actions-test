@@ -39,7 +39,12 @@ jobs:
           role-to-assume: ${{ env.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: CDK Version Check
+        shell: bash
+        run: npm run cdk -- --version
+
       - name: CDK Diff Check
+        shell: bash
         run: npm run cdk diff -- --all
 
       - name: CDK Deploy
