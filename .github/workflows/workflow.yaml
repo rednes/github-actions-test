@@ -20,7 +20,7 @@ jobs:
         users: actions/checkout@v2`
 
       - name: Configure AWS credentials from IAM Role
-        uses: aws-actions/configure-aws-credentials@v1
+        users: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ env.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
