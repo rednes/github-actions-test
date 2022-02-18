@@ -4,10 +4,27 @@ on:
     branches:
       - main
 
+env:
+  AWS_REGION: ap-northeast-1
+  AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
+
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   dev:
     runs-on: ubuntu-latest
     steps:
-      - name: Hello World
+      - name: Checkout
+        users: actions/checkout@v2`
+
+      - name: Configure AWS credentials from IAM Role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: who am i
         shell: bash
-        run: echo Hello World!!
+        run: aws sts get-caller-identity
